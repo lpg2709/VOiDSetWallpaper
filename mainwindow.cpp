@@ -6,7 +6,11 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
     this->isFileSelected = false;
+    this->isDarkTheme = false;
+    this->wallpaperStyle = DWPOS_CENTER;
+
     this->print_log("Starting program ...");
     this->print_log("Get current Wallpaper configuration ...");
     this->get_current_wallpaper();
@@ -59,21 +63,27 @@ void MainWindow::get_current_wallpaper(){
         switch(wallpaper_style){
             case 0:
                 ui->radioButton_tab2_center->setChecked(true);
+                this->wallpaperStyle = DWPOS_CENTER;
                 break;
             case 1:
                 ui->radioButton_tab2_tile->setChecked(true);
+                this->wallpaperStyle = DWPOS_TILE;
                 break;
             case 2:
                 ui->radioButton_tab2_stretch->setChecked(true);
+                this->wallpaperStyle = DWPOS_STRETCH;
                 break;
             case 3:
                 ui->radioButton_tab2_fit->setChecked(true);
+                this->wallpaperStyle = DWPOS_FIT;
                 break;
             case 4:
                 ui->radioButton_tab2_fill->setChecked(true);
+                this->wallpaperStyle = DWPOS_FILL;
                 break;
             case 5:
                 ui->radioButton_tab2_span->setChecked(true);
+                this->wallpaperStyle = DWPOS_SPAN;
                 break;
         }
         this->print_log("Get current Wallpaper style: " + QString::number(wallpaper_style));
@@ -84,18 +94,24 @@ void MainWindow::get_current_wallpaper(){
 
     // TODO: Dark theme
     // HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize\AppsUseLightTheme
-    // HKEY_CURRENT_USER\SOFTWARE\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\microsoft.microsoftedge_8wekyb3d8bbwe\MicrosoftEdge\Main\Theme
 
-    // Get HKLM AppsUseLightTheme
+    // Get AppsUseLightTheme
     this->print_log("Get current theme ...");
     int AppsUseLightTheme = WindowsReg::get_DWORD_value(HKEY_CURRENT_USER, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "AppsUseLightTheme");
-    if (wallpaper_style > -1) {
+    if (AppsUseLightTheme > -1) {
         this->print_log("Get current theme: " + QString::number(AppsUseLightTheme));
+        switch(AppsUseLightTheme){
+            case 0:
+                ui->radioButton_tab2_dark->setChecked(true);
+            break;
+            case 1:
+                ui->radioButton_tab2_light->setChecked(true);
+            break;
+        }
     } else {
         this->print_log("Error: Reading AppsUseLightTheme: " + QString::number(AppsUseLightTheme));
         QMessageBox::critical(this, "Error", "Error reading AppsUseLightTheme: " + QString::number(AppsUseLightTheme), QMessageBox::Ok);
     }
-
 }
 
 void MainWindow::on_pushButton_tab1_open_file_clicked(){
@@ -108,7 +124,6 @@ void MainWindow::on_pushButton_tab1_open_file_clicked(){
 
 void MainWindow::on_pushButton_tab1_setwallpaper_clicked()
 {
-    int wallpaper_style = 0;
     QVector<bool> wallpaper_style_option;
 
     this->print_log("Setting Wallpaper ...");
@@ -116,18 +131,6 @@ void MainWindow::on_pushButton_tab1_setwallpaper_clicked()
     if(!this->isFileSelected){
         QMessageBox::warning(this, "Error", "Images is not selected!", QMessageBox::Ok);
     }else{
-        wallpaper_style_option.append(ui->radioButton_tab1_center->isChecked());
-        wallpaper_style_option.append(ui->radioButton_tab1_tile->isChecked());
-        wallpaper_style_option.append(ui->radioButton_tab1_stretch->isChecked());
-        wallpaper_style_option.append(ui->radioButton_tab1_fit->isChecked());
-        wallpaper_style_option.append(ui->radioButton_tab1_fill->isChecked());
-        wallpaper_style_option.append(ui->radioButton_tab1_span->isChecked());
-
-        this->print_log("Readding Wallpaper style ...");
-        for(int i = 0; i < wallpaper_style_option.length(); i++){
-            if(wallpaper_style_option[i])
-                wallpaper_style = i;
-        }
         this->print_log("Setting Wallpaper style ...");
 //        // Set Wallpaper Style
 //        HKEY hKey = HKEY_CURRENT_USER;
@@ -163,5 +166,40 @@ void MainWindow::on_pushButton_tab1_setwallpaper_clicked()
         }
 
     }
+}
+
+void MainWindow::on_radioButton_tab1_light_toggled(bool checked) {
+    this->isDarkTheme = checked;
+}
+
+
+void MainWindow::on_radioButton_tab1_center_clicked() {
+    if(ui->radioButton_tab1_center)
+        this->wallpaperStyle = DWPOS_CENTER;
+}
+
+void MainWindow::on_radioButton_tab1_tile_clicked() {
+    if(ui->radioButton_tab1_center)
+        this->wallpaperStyle = DWPOS_TILE;
+}
+
+void MainWindow::on_radioButton_tab1_stretch_clicked() {
+    if(ui->radioButton_tab1_center)
+        this->wallpaperStyle = DWPOS_STRETCH;
+}
+
+void MainWindow::on_radioButton_tab1_fit_clicked() {
+    if(ui->radioButton_tab1_center)
+        this->wallpaperStyle = DWPOS_FIT;
+}
+
+void MainWindow::on_radioButton_tab1_fill_clicked() {
+    if(ui->radioButton_tab1_center)
+        this->wallpaperStyle = DWPOS_FILL;
+}
+
+void MainWindow::on_radioButton_tab1_span_clicked() {
+    if(ui->radioButton_tab1_center)
+        this->wallpaperStyle = DWPOS_SPAN;
 }
 

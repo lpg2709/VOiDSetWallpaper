@@ -16,6 +16,7 @@
 #include <qDebug>
 
 #include "windowsreg.h"
+#include "shobjidl.h" // for DESKTOP_WALLPAPER_POSITION
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -29,10 +30,8 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     bool isFileSelected;
-
-    enum WALLPAPER_STYLE {
-        CENTER, TILE, STRETCH, FIT, FILL, SPAN
-    };
+    bool isDarkTheme;
+    DESKTOP_WALLPAPER_POSITION wallpaperStyle;
 
 private slots:
     void on_pushButton_tab1_open_file_clicked();
@@ -42,6 +41,8 @@ private slots:
     void on_pushButton_tab1_setwallpaper_clicked();
 
     void print_log(QString msg);
+
+    void on_radioButton_tab1_light_toggled(bool checked);
 
 private:
     Ui::MainWindow *ui;
