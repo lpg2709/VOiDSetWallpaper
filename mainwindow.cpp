@@ -25,7 +25,7 @@ void MainWindow::get_current_wallpaper(){
     if (!result){
         QMessageBox::critical(this, "Error", "Fail to get the wallpaper: " + QString::number(result), QMessageBox::Ok);
     }else{
-        QString file_name = QString::fromWCharArray(bgPath);
+        QString file_name = QString::fromWCharArray(bgPath).replace("\\", "/");
         QPixmap pix(file_name);
         ui->lineEdit_tab2_file_path->setText(file_name);
         ui->label_tab2_image_preview->setPixmap(pix.scaled(650, 400, Qt::KeepAspectRatio));
@@ -95,8 +95,8 @@ void MainWindow::on_pushButton_tab1_setwallpaper_clicked()
         QString filepath =  ui->lineEdit_tab1_file_path->text().replace("/", "\\");
         char path[150];
         strncpy(path, filepath.toStdString().c_str(), sizeof(path));
-        printf("%s\n", path);
-        int result = SystemParametersInfoA(SPI_SETDESKWALLPAPER, 0, (PVOID) "C:\\Users\\T243887\\Downloads\\forest.jpg", SPIF_UPDATEINIFILE);
+
+        int result = SystemParametersInfoA(SPI_SETDESKWALLPAPER, 0, (PVOID) path, SPIF_UPDATEINIFILE);
 
         if (!result){
             QMessageBox::critical(this, "Error", "Fail to set the wallpaper: " + QString::number(result), QMessageBox::Ok);
