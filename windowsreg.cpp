@@ -25,19 +25,13 @@ int WindowsReg::get_REG_SZ_value(HKEY _hkey, LPCSTR _lpSubKey, LPCSTR _lpValue){
     }
 }
 
-int WindowsReg::set_REG_SZ_value(HKEY _hKey, LPCSTR _lpValueName, const BYTE *_lpData){
-    // Set REG_SZ type Registry
-    HKEY hKey = _hKey;
-    LPCSTR lpValueName = _lpValueName;
-    DWORD dwType = RRF_RT_REG_SZ;
-    DWORD cbData = sizeof(_lpData);
+int WindowsReg::set_REG_SZ_value(HKEY hKey, LPCSTR lpValueName, DWORD data){
+    LONG nErr = RegSetValueExA(hKey, lpValueName, 0, REG_SZ, (LPBYTE)&data, sizeof(data));
 
-    int result = RegSetValueExA(hKey, lpValueName, 0, dwType, _lpData, cbData);
-
-    if (ERROR_SUCCESS == result) {
+    if(ERROR_SUCCESS == nErr){
         return 0;
     } else {
-        return result;
+        return nErr;
     }
 }
 
@@ -60,27 +54,13 @@ int WindowsReg::get_DWORD_value(HKEY _hkey, LPCSTR _lpSubKey, LPCSTR _lpValue){
     }
 }
 
-int WindowsReg::set_DWORD_value(HKEY _hKey, LPCSTR _lpValueName, const BYTE *_lpData){
-    // Set REG_DWORD type Registry
-    HKEY hKey = _hKey;
-    LPCSTR lpValueName = _lpValueName;
-    DWORD dwType = RRF_RT_DWORD;
-    DWORD cbData = sizeof(_lpData);
+int WindowsReg::set_DWORD_value(HKEY hKey, LPCSTR lpValueName, DWORD data){
+    LONG nErr = RegSetValueExA(hKey, lpValueName, 0, REG_DWORD, (LPBYTE)&data, sizeof(data));
 
-    HKEY hKey_handler;
-    int result = RegOpenKeyExA(hKey, lpValueName, 0, KEY_ALL_ACCESS , &hKey_handler);
-    if (ERROR_SUCCESS == result) {
-        result = RegSetValueExA(hKey_handler, lpValueName, 0, dwType, _lpData, cbData);
-        RegCloseKey(hKey_handler);
-        if (ERROR_SUCCESS == result) {
-            return 0;
-        } else {
-            return result;
-        }
+    if(ERROR_SUCCESS == nErr){
+        return 0;
     } else {
-        return result;
+        return nErr;
     }
-
-
 
 }

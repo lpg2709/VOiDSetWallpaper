@@ -10,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
     this->isFileSelected = false;
     this->isDarkTheme = false;
     this->wallpaperStyle = DWPOS_CENTER;
+    this->final_wallpaper_folder = QDir::toNativeSeparators(QDir::homePath() + "/AppData/Local/Microsoft/Windows/Themes/RoamedThemeFiles/DesktopBackground/");
 
     this->print_log("Starting program ...");
     this->print_log("Get current Wallpaper configuration ...");
@@ -127,22 +128,28 @@ void MainWindow::on_pushButton_tab1_setwallpaper_clicked()
         QMessageBox::warning(this, "Error", "Images is not selected!", QMessageBox::Ok);
     }else{
         this->print_log("Setting Wallpaper style ...");
-        //        // Set Wallpaper Style
-        //        const BYTE *lpData = (const BYTE*) wallpaper_style;
 
-        //        int wallpaper_style_status = WindowsReg::set_REG_SZ_value(HKEY_CURRENT_USER, "Control Panel\\Desktop", lpData);
-        //        if (wallpaper_style_status > 0){
-        //            QMessageBox::critical(this, "Error", "Fail to set the wallpaper style: " + QString::number(wallpaper_style_status), QMessageBox::Ok);
-        //        }
+
+        int wallpaper_style_status = WindowsReg::set_REG_SZ_value(HKEY_CURRENT_USER, "Control Panel\\Desktop", this->wallpaperStyle);
+        if (wallpaper_style_status > 0){
+            QMessageBox::critical(this, "Error", "Fail to set the wallpaper style: " + QString::number(wallpaper_style_status), QMessageBox::Ok);
+        }
 
         QString filepath =  ui->lineEdit_tab1_file_path->text().replace("/", "\\");
         QStringList parts = filepath.split(QDir::separator());
         QString filename = parts.at(parts.size()-1);
-        QString final_filepath = QDir::homePath() + QDir::toNativeSeparators("/AppData/Local/Microsoft/Windows/Themes/RoamedThemeFiles/DesktopBackground/" + filename);
+        QString final_filepath = this->final_wallpaper_folder + filename;
         char path[150];
         strncpy(path, final_filepath.toStdString().c_str(), sizeof(path));
 
         this->print_log("Copy wallpaper file to default path ...");
+        this->print_log("Check if default folder exist ...");
+        if(!QDir("Folder").exists()){
+            this->print_log("Default folder not exist, creating");
+            QDir().mkpath(this->final_wallpaper_folder);
+            this->print_log("Default folder created");
+        }
+        this->print_log("Copy file ...");
         QFile::copy(QDir::toNativeSeparators(filepath), final_filepath);
         this->print_log("File copy: " + final_filepath);
 
@@ -165,7 +172,7 @@ void MainWindow::on_radioButton_tab1_light_toggled(bool checked) {
     this->isDarkTheme = checked;
     DWORD darkTheme = this->isDarkTheme ? 1 : 0;
 
-    int result = WindowsReg::set_DWORD_value(HKEY_CURRENT_USER, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize\\AppsUseLightTheme", (const BYTE*)&darkTheme);
+    int result = WindowsReg::set_DWORD_value(HKEY_CURRENT_USER, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize\\AppsUseLightTheme", darkTheme);
 
     if (ERROR_SUCCESS == result) {
         this->print_log("Deu boa: " + QString::number(darkTheme));
