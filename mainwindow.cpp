@@ -81,6 +81,21 @@ void MainWindow::get_current_wallpaper(){
         this->print_log("Error: Reading WallpaperStyle: " + QString::number(wallpaper_style));
         QMessageBox::critical(this, "Error", "Error reading WallpaperStyle: " + QString::number(wallpaper_style), QMessageBox::Ok);
     }
+
+    // TODO: Dark theme
+    // HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize\AppsUseLightTheme
+    // HKEY_CURRENT_USER\SOFTWARE\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\microsoft.microsoftedge_8wekyb3d8bbwe\MicrosoftEdge\Main\Theme
+
+    // Get HKLM AppsUseLightTheme
+    this->print_log("Get current theme ...");
+    int AppsUseLightTheme = WindowsReg::get_DWORD_value(HKEY_CURRENT_USER, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "AppsUseLightTheme");
+    if (wallpaper_style > -1) {
+        this->print_log("Get current theme: " + QString::number(AppsUseLightTheme));
+    } else {
+        this->print_log("Error: Reading AppsUseLightTheme: " + QString::number(AppsUseLightTheme));
+        QMessageBox::critical(this, "Error", "Error reading AppsUseLightTheme: " + QString::number(AppsUseLightTheme), QMessageBox::Ok);
+    }
+
 }
 
 void MainWindow::on_pushButton_tab1_open_file_clicked(){
