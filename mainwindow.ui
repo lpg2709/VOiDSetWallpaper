@@ -42,7 +42,7 @@
       <item>
        <widget class="QTabWidget" name="tabWidget">
         <property name="currentIndex">
-         <number>0</number>
+         <number>2</number>
         </property>
         <widget class="QWidget" name="tab_set">
          <property name="layoutDirection">
@@ -142,6 +142,40 @@
               </item>
              </layout>
             </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_tab1_theme">
+              <property name="text">
+               <string>Theme</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <layout class="QHBoxLayout" name="horizontalLayout_3">
+              <item>
+               <widget class="QRadioButton" name="radioButton_tab1_light">
+                <property name="text">
+                 <string>Light</string>
+                </property>
+                <attribute name="buttonGroup">
+                 <string notr="true">buttonGroup_tab1_theme</string>
+                </attribute>
+               </widget>
+              </item>
+              <item>
+               <widget class="QRadioButton" name="radioButton_tab1_dark">
+                <property name="text">
+                 <string>Dark</string>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
+                </property>
+                <attribute name="buttonGroup">
+                 <string notr="true">buttonGroup_tab1_theme</string>
+                </attribute>
+               </widget>
+              </item>
+             </layout>
+            </item>
             <item row="3" column="0">
              <widget class="QLabel" name="label_tab1_wallpaper_preview">
               <property name="text">
@@ -158,34 +192,6 @@
                <set>Qt::AlignCenter</set>
               </property>
              </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_tab1_theme">
-              <property name="text">
-               <string>Theme</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <layout class="QHBoxLayout" name="horizontalLayout_3">
-              <item>
-               <widget class="QRadioButton" name="radioButton_tab1_light">
-                <property name="text">
-                 <string>Light</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QRadioButton" name="radioButton_tab1_dark">
-                <property name="text">
-                 <string>Dark</string>
-                </property>
-                <property name="checked">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-             </layout>
             </item>
            </layout>
           </item>
@@ -331,6 +337,9 @@
               <property name="text">
                <string>Light</string>
               </property>
+              <attribute name="buttonGroup">
+               <string notr="true">buttonGroup_tab2_theme</string>
+              </attribute>
              </widget>
             </item>
             <item>
@@ -341,6 +350,9 @@
               <property name="text">
                <string>Dark</string>
               </property>
+              <attribute name="buttonGroup">
+               <string notr="true">buttonGroup_tab2_theme</string>
+              </attribute>
              </widget>
             </item>
            </layout>
@@ -359,6 +371,9 @@
             </property>
             <property name="undoRedoEnabled">
              <bool>false</bool>
+            </property>
+            <property name="lineWrapMode">
+             <enum>QPlainTextEdit::NoWrap</enum>
             </property>
             <property name="readOnly">
              <bool>true</bool>
@@ -387,4 +402,8 @@
  </widget>
  <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="buttonGroup_tab1_theme"/>
+  <buttongroup name="buttonGroup_tab2_theme"/>
+ </buttongroups>
 </ui>

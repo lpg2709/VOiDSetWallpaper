@@ -32,6 +32,7 @@ public:
     bool isFileSelected;
     bool isDarkTheme;
     DESKTOP_WALLPAPER_POSITION wallpaperStyle;
+    QString final_wallpaper_folder;
 
 private slots:
     void on_pushButton_tab1_open_file_clicked();
