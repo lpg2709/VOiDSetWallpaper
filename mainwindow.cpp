@@ -100,10 +100,12 @@ void MainWindow::get_current_wallpaper(){
         this->print_log("Current theme: " + QString::number(AppsUseLightTheme));
         switch(AppsUseLightTheme){
         case 0:
+            ui->radioButton_tab1_dark->setChecked(true);
             ui->radioButton_tab2_dark->setChecked(true);
             break;
         case 1:
-            ui->radioButton_tab2_light->setChecked(true);
+            ui->radioButton_tab1_light->setChecked(true);
+            ui->radioButton_tab2_dark->setChecked(true);
             break;
         }
     } else {
@@ -130,7 +132,7 @@ void MainWindow::on_pushButton_tab1_setwallpaper_clicked()
         this->print_log("Setting Wallpaper style ...");
 
 
-        int wallpaper_style_status = WindowsReg::set_REG_SZ_value(HKEY_CURRENT_USER, "Control Panel\\Desktop", this->wallpaperStyle);
+        int wallpaper_style_status = WindowsReg::set_REG_SZ_value(HKEY_CURRENT_USER, "Control Panel\\Desktop", "WallpaperStyle", this->wallpaperStyle + 48);
         if (wallpaper_style_status > 0){
             QMessageBox::critical(this, "Error", "Fail to set the wallpaper style: " + QString::number(wallpaper_style_status), QMessageBox::Ok);
         }
@@ -172,13 +174,23 @@ void MainWindow::on_radioButton_tab1_light_toggled(bool checked) {
     this->isDarkTheme = checked;
     DWORD darkTheme = this->isDarkTheme ? 1 : 0;
 
-    int result = WindowsReg::set_DWORD_value(HKEY_CURRENT_USER, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize\\AppsUseLightTheme", darkTheme);
-
+    this->print_log("Changing theme[AppsUseLightTheme]...");
+    int result = WindowsReg::set_DWORD_value(HKEY_CURRENT_USER, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "AppsUseLightTheme", darkTheme);
     if (ERROR_SUCCESS == result) {
-        this->print_log("Deu boa: " + QString::number(darkTheme));
+        this->print_log("Theme change success [AppsUseLightTheme].");
     } else {
-        this->print_log("RUIM: " + QString::number(result));
+        this->print_log("Error changing theme [AppsUseLightTheme]: " + QString::number(result));
     }
+    this->print_log("Changing theme [SystemUsesLightTheme]...");
+    result = WindowsReg::set_DWORD_value(HKEY_CURRENT_USER, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "SystemUsesLightTheme", darkTheme);
+    if (ERROR_SUCCESS == result) {
+        this->print_log("Theme change success [SystemUsesLightTheme].");
+    } else {
+        this->print_log("Error changing theme [SystemUsesLightTheme]: " + QString::number(result));
+    }
+    this->print_log("Result: " + QString::number(result));
+
+
 }
 
 
