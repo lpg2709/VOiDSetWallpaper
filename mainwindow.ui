@@ -31,6 +31,10 @@
   <property name="windowTitle">
    <string>VOiD Set Wallpaper</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../../Downloads/VOiD-icon.png</normaloff>../../Downloads/VOiD-icon.png</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
@@ -158,7 +162,7 @@
            </layout>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_setwallpaper">
+           <widget class="QPushButton" name="pushButton_tab1_setwallpaper">
             <property name="text">
              <string>Set Wallpaper</string>
             </property>
@@ -247,6 +251,9 @@
               </property>
               <property name="text">
                <string>Fill</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
