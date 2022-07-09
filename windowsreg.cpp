@@ -59,3 +59,28 @@ int WindowsReg::get_DWORD_value(HKEY _hkey, LPCSTR _lpSubKey, LPCSTR _lpValue){
         return result;
     }
 }
+
+int WindowsReg::set_DWORD_value(HKEY _hKey, LPCSTR _lpValueName, const BYTE *_lpData){
+    // Set REG_DWORD type Registry
+    HKEY hKey = _hKey;
+    LPCSTR lpValueName = _lpValueName;
+    DWORD dwType = RRF_RT_DWORD;
+    DWORD cbData = sizeof(_lpData);
+
+    HKEY hKey_handler;
+    int result = RegOpenKeyExA(hKey, lpValueName, 0, KEY_ALL_ACCESS , &hKey_handler);
+    if (ERROR_SUCCESS == result) {
+        result = RegSetValueExA(hKey_handler, lpValueName, 0, dwType, _lpData, cbData);
+        RegCloseKey(hKey_handler);
+        if (ERROR_SUCCESS == result) {
+            return 0;
+        } else {
+            return result;
+        }
+    } else {
+        return result;
+    }
+
+
+
+}

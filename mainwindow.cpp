@@ -61,30 +61,30 @@ void MainWindow::get_current_wallpaper(){
 
     if (wallpaper_style > -1) {
         switch(wallpaper_style){
-            case 0:
-                ui->radioButton_tab2_center->setChecked(true);
-                this->wallpaperStyle = DWPOS_CENTER;
-                break;
-            case 1:
-                ui->radioButton_tab2_tile->setChecked(true);
-                this->wallpaperStyle = DWPOS_TILE;
-                break;
-            case 2:
-                ui->radioButton_tab2_stretch->setChecked(true);
-                this->wallpaperStyle = DWPOS_STRETCH;
-                break;
-            case 3:
-                ui->radioButton_tab2_fit->setChecked(true);
-                this->wallpaperStyle = DWPOS_FIT;
-                break;
-            case 4:
-                ui->radioButton_tab2_fill->setChecked(true);
-                this->wallpaperStyle = DWPOS_FILL;
-                break;
-            case 5:
-                ui->radioButton_tab2_span->setChecked(true);
-                this->wallpaperStyle = DWPOS_SPAN;
-                break;
+        case 0:
+            ui->radioButton_tab2_center->setChecked(true);
+            this->wallpaperStyle = DWPOS_CENTER;
+            break;
+        case 1:
+            ui->radioButton_tab2_tile->setChecked(true);
+            this->wallpaperStyle = DWPOS_TILE;
+            break;
+        case 2:
+            ui->radioButton_tab2_stretch->setChecked(true);
+            this->wallpaperStyle = DWPOS_STRETCH;
+            break;
+        case 3:
+            ui->radioButton_tab2_fit->setChecked(true);
+            this->wallpaperStyle = DWPOS_FIT;
+            break;
+        case 4:
+            ui->radioButton_tab2_fill->setChecked(true);
+            this->wallpaperStyle = DWPOS_FILL;
+            break;
+        case 5:
+            ui->radioButton_tab2_span->setChecked(true);
+            this->wallpaperStyle = DWPOS_SPAN;
+            break;
         }
         this->print_log("Get current Wallpaper style: " + QString::number(wallpaper_style));
     } else {
@@ -92,20 +92,17 @@ void MainWindow::get_current_wallpaper(){
         QMessageBox::critical(this, "Error", "Error reading WallpaperStyle: " + QString::number(wallpaper_style), QMessageBox::Ok);
     }
 
-    // TODO: Dark theme
-    // HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize\AppsUseLightTheme
-
     // Get AppsUseLightTheme
     this->print_log("Get current theme ...");
     int AppsUseLightTheme = WindowsReg::get_DWORD_value(HKEY_CURRENT_USER, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "AppsUseLightTheme");
     if (AppsUseLightTheme > -1) {
-        this->print_log("Get current theme: " + QString::number(AppsUseLightTheme));
+        this->print_log("Current theme: " + QString::number(AppsUseLightTheme));
         switch(AppsUseLightTheme){
-            case 0:
-                ui->radioButton_tab2_dark->setChecked(true);
+        case 0:
+            ui->radioButton_tab2_dark->setChecked(true);
             break;
-            case 1:
-                ui->radioButton_tab2_light->setChecked(true);
+        case 1:
+            ui->radioButton_tab2_light->setChecked(true);
             break;
         }
     } else {
@@ -124,23 +121,19 @@ void MainWindow::on_pushButton_tab1_open_file_clicked(){
 
 void MainWindow::on_pushButton_tab1_setwallpaper_clicked()
 {
-    QVector<bool> wallpaper_style_option;
-
     this->print_log("Setting Wallpaper ...");
 
     if(!this->isFileSelected){
         QMessageBox::warning(this, "Error", "Images is not selected!", QMessageBox::Ok);
     }else{
         this->print_log("Setting Wallpaper style ...");
-//        // Set Wallpaper Style
-//        HKEY hKey = HKEY_CURRENT_USER;
-//        LPCSTR lpValueName = "Control Panel\\Desktop";
-//        const BYTE *lpData = (const BYTE*) wallpaper_style;
+        //        // Set Wallpaper Style
+        //        const BYTE *lpData = (const BYTE*) wallpaper_style;
 
-//        int wallpaper_style_status = WindowsReg::set_REG_SZ_value(hKey, lpValueName, lpData);
-//        if (wallpaper_style_status > 0){
-//            QMessageBox::critical(this, "Error", "Fail to set the wallpaper style: " + QString::number(wallpaper_style_status), QMessageBox::Ok);
-//        }
+        //        int wallpaper_style_status = WindowsReg::set_REG_SZ_value(HKEY_CURRENT_USER, "Control Panel\\Desktop", lpData);
+        //        if (wallpaper_style_status > 0){
+        //            QMessageBox::critical(this, "Error", "Fail to set the wallpaper style: " + QString::number(wallpaper_style_status), QMessageBox::Ok);
+        //        }
 
         QString filepath =  ui->lineEdit_tab1_file_path->text().replace("/", "\\");
         QStringList parts = filepath.split(QDir::separator());
@@ -170,6 +163,15 @@ void MainWindow::on_pushButton_tab1_setwallpaper_clicked()
 
 void MainWindow::on_radioButton_tab1_light_toggled(bool checked) {
     this->isDarkTheme = checked;
+    DWORD darkTheme = this->isDarkTheme ? 1 : 0;
+
+    int result = WindowsReg::set_DWORD_value(HKEY_CURRENT_USER, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize\\AppsUseLightTheme", (const BYTE*)&darkTheme);
+
+    if (ERROR_SUCCESS == result) {
+        this->print_log("Deu boa: " + QString::number(darkTheme));
+    } else {
+        this->print_log("RUIM: " + QString::number(result));
+    }
 }
 
 
