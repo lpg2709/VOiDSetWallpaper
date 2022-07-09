@@ -44,6 +44,18 @@ private slots:
 
     void on_radioButton_tab1_light_toggled(bool checked);
 
+    void on_radioButton_tab1_center_clicked();
+
+    void on_radioButton_tab1_tile_clicked();
+
+    void on_radioButton_tab1_stretch_clicked();
+
+    void on_radioButton_tab1_fit_clicked();
+
+    void on_radioButton_tab1_fill_clicked();
+
+    void on_radioButton_tab1_span_clicked();
+
 private:
     Ui::MainWindow *ui;
 };
