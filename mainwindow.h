@@ -6,11 +6,14 @@
 #include <QMainWindow>
 #include <QFileDialog>
 #include <QDir>
+#include <QFile>
 #include <QPixmap>
 #include <QString>
 #include <QVector>
 #include <windows.h>
 #include <QMessageBox>
+#include <QDateTime>
+#include <qDebug>
 
 #include "windowsreg.h"
 
@@ -37,6 +40,8 @@ private slots:
     void get_current_wallpaper();
 
     void on_pushButton_tab1_setwallpaper_clicked();
+
+    void print_log(QString msg);
 
 private:
     Ui::MainWindow *ui;
