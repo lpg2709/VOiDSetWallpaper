@@ -1,4 +1,5 @@
 #include "windowsreg.h"
+#include <stdio.h>
 
 WindowsReg::WindowsReg()
 {

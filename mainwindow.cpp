@@ -76,10 +76,10 @@ void MainWindow::get_current_wallpaper(){
                 ui->radioButton_tab2_span->setChecked(true);
                 break;
         }
-        this->print_log("Get current Wallpaper style: " + QString::number(result));
+        this->print_log("Get current Wallpaper style: " + QString::number(wallpaper_style));
     } else {
-        this->print_log("Error: Reading WallpaperStyle: " + QString::number(result));
-        QMessageBox::critical(this, "Error", "Error reading WallpaperStyle: " + QString::number(result), QMessageBox::Ok);
+        this->print_log("Error: Reading WallpaperStyle: " + QString::number(wallpaper_style));
+        QMessageBox::critical(this, "Error", "Error reading WallpaperStyle: " + QString::number(wallpaper_style), QMessageBox::Ok);
     }
 }
 
