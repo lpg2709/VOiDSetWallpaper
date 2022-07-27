@@ -53,7 +53,7 @@ else()
     qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 endif()
 
-target_link_libraries(VOiDsetWallpaper PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(VOiDsetWallpaper PRIVATE Qt${QT_VERSION_MAJOR}::Widgets -static)
 
 set_target_properties(VOiDsetWallpaper PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
