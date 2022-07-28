@@ -16,7 +16,17 @@
 #include <qDebug>
 
 #include "windowsreg.h"
-#include "shobjidl.h" // for DESKTOP_WALLPAPER_POSITION
+
+// DESKTOP_WALLPAPER_POSITION Copy from shobjidl.h
+//  just because it gives error when compiling for debug????
+typedef enum DESKTOP_WALLPAPER_POSITION {
+    DWPOS_CENTER = 0,
+    DWPOS_TILE = 1,
+    DWPOS_STRETCH = 2,
+    DWPOS_FIT = 3,
+    DWPOS_FILL = 4,
+    DWPOS_SPAN = 5
+} DESKTOP_WALLPAPER_POSITION;
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
